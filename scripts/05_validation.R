@@ -19,18 +19,19 @@ pacman::p_load(
 )
 
 # Load data --------------------------------------------------------------------
-tabular_data <- readRDS(file = here("data", "processed", "tabular_game_data.rds"))
+raw_data <- readRDS(file = here("data", "processed", "tabular_game_data.rds"))
 
 ## PROCESSING ##################################################################
 
 # X ----------------------------------------------------------------------------
-plot_data <- tabular_data %>%
+tabular_data <- raw_data %>%
 	filter(both_games == 1)
 
-
+fixest::feols(h / 5 ~ 1 +  t + game | region, data = tabular_data) %>%
+	etable()
 
 lm(h/5 ~ t + game + factor(region),
-			data = plot_data) %>%
+			data = tabular_data) %>%
 	summary()
 
 plot_data %>%

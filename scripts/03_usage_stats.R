@@ -47,8 +47,8 @@ get_n <- function(data, n = 1) {
 
 ## VISUALIZE ###################################################################
 
-expand_grid(from = c(1603, 78, 23, 12, 7),
-						to = c(1603, 78, 23, 12, 7)) %>%
+expand_grid(from = c(1603, 78, 32, 17, 9),
+						to = c(1603, 78, 32, 17, 9)) %>%
 	filter(to < from) %>%
 	mutate(rate = to / from,
 				 from = as.factor(from),
