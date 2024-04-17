@@ -13,93 +13,140 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
+pacman::p_load(
+	here,
+	rnaturalearth,
+	sf,
+	tidyverse
+)
 
 # Load data --------------------------------------------------------------------
-raw_game_data <- readRDS(file = here("data", "raw", "raw_game_data.rds"))
+state_counts_raw <- read_csv(here("data/raw/lugares_alcance_post.csv"))
+demographics_raw <- read_csv(here("data/raw/edades_alcance_post.csv"))
+tabular_data <- readRDS(file = here("data", "processed", "tabular_game_data.rds"))
+
+# Spatial layers ---------------------------------------------------------------
+mex_zones <- st_read(here("../data_mex_fisheries/data/spatial_features/clean/mexico_fishing_regions.gpkg")) %>%
+	st_simplify()
+mex <- ne_states(country = "Mexico", returnclass = "sf") %>%
+	select(state = name)
 
 ## PROCESSING ##################################################################
 
-# X ----------------------------------------------------------------------------
-# Get some stats ---------------------------------------------------------------
-# Number of accesses
-raw_game_data %>%
-  pull(session_id) %>%
-  unique() %>%
-  length()
+# Interactions by state --------------------------------------------------------
+state_counts <- state_counts_raw %>%
+	rename(post = Pauta,
+				 state = Estado,
+				 n = N) %>%
+	mutate(state = case_when(state == "San Luis" ~ "San Luis Potosí",
+													 state == "Estado de México" ~ "México",
+													 T ~ state)) %>%
+	group_by(state) %>%
+	summarize(n = sum(n), .groups = "drop")
 
-# Number of games with at least one move
-raw_game_data %>%
-  filter(map_dbl(data, ~dim(.x$result)[1]) > 1) %>%
-  pull(session_id) %>%
-  unique() %>%
-  length()
+data <- mex %>%
+	left_join(state_counts, by = "state")
 
-raw_game_data %>%
-  filter(map_dbl(data, ~max(.x$result$g)) >= 2) %>%
-  pull(session_id) %>%
-  unique() %>%
-  length()
+# Interactions by age / gender -------------------------------------------------
+demographics <- demographics_raw %>%
+	janitor::clean_names() %>%
+	select(age_bracket = rango_edad, female = number_mujeres, male = number_hombres) %>%
+	group_by(age_bracket) %>%
+	summarize_all(sum) %>%
+	pivot_longer(cols = c(female, male),
+							 values_to = "count",
+							 names_to = "gender") %>%
+	mutate(gender = str_to_sentence(gender))
 
-get_n <- function(data, n = 1) {
-  map_lgl(data, ~(max(.x$result$g) >= n)) %>%
-    sum()
-}
+# Responses by fishing region --------------------------------------------------
+sample_data <- tabular_data %>%
+	select(region, session_id, g) %>%
+	distinct() %>%
+	count(region) %>%
+	mutate(region = case_when(region == 1 ~ "BC Pacifico",
+														region == 2 ~ "Golfo de California",
+														region == 3 ~ "Pacífico Sur",
+														region == 4 ~ "Golfo de México",
+														region == 5 ~ "Caribe",
+														T ~ "Not specified"))
+
+zones <- mex_zones %>%
+	mutate(region = case_when(region == 1 ~ "BC Pacifico",
+														region == 2 ~ "Golfo de California",
+														region == 3 ~ "Pacífico Sur",
+														region == 4 ~ "Pacífico Sur",
+														region == 5 ~ "Golfo de México",
+														region == 6 ~ "Caribe",
+														T ~ "Not specified")) %>%
+	group_by(region) %>%
+	summarize()
+
+player_stats <- zones %>%
+	left_join(sample_data, by = "region")
 
 ## VISUALIZE ###################################################################
 
-expand_grid(from = c(1603, 78, 32, 17, 9),
-						to = c(1603, 78, 32, 17, 9)) %>%
-	filter(to < from) %>%
-	mutate(rate = to / from,
-				 from = as.factor(from),
-				 to = as.factor(to),
-				 to = fct_reorder(to, -as.numeric(to))) %>%
-	ggplot(aes(x = factor(to),
-						 y = factor(from),
-						 fill = rate)) +
-	geom_raster() +
-	theme_minimal() +
-	coord_equal() +
-	scale_x_discrete(position = "top") +
-	scale_fill_viridis_c(labels = scales::percent) +
-	labs(x = "To",
-			 y = "From",
-			 fill = "Survival\nrate")
-
-
 # X ----------------------------------------------------------------------------
-raw_game_data %>%
-  select(session_id, data) %>%
-  mutate(date = str_extract(session_id, "[:alnum:]{3}_[:alnum:]{3}_[:digit:]+_")) %>%
-  mutate(date = paste0(date, "2023")) %>%
-  mutate(date = str_replace_all(date, "_", " ")) %>%
-  mutate(date = str_remove(date, "[:alpha:]{3}")) %>%
-  mutate(date = str_trim(date)) %>%
-  mutate(date = lubridate::mdy(date)) %>%
-  group_by(date) %>%
-  summarize(n = n(),
-            n1 = get_n(data = data, n = 1),
-            n2 = get_n(data = data, n = 2)) %>%
-  ungroup() %>%
-  bind_rows(tibble(date = ymd("2023-11-15"),
-                   n = 0,
-                   n1 = 0,
-                   n2 = 0)) %>%
-  arrange(date) %>%
-  mutate(n = cumsum(n),
-         n1 = cumsum(n1),
-         n2 = cumsum(n2)) %>%
-  pivot_longer(cols = contains("n"), names_to = "val", values_to = "n") %>%
-  ggplot(aes(x = date, y = n, color = val)) +
-	geom_vline(xintercept = ymd("2023-11-15")) +
-	geom_vline(xintercept = ymd("2023-11-24")) +
-	geom_vline(xintercept = ymd("2023-12-05")) +
-  geom_step() +
-  labs(x = "Date",
-       y = "Number of responses",
-       color = "Measure") +
-  theme_minimal()
+map <- ggplot(data = data, aes(fill = n)) +
+	geom_sf(color = "black") +
+	theme_minimal(base_size = 7) +
+	scale_fill_gradient(low = "white", high = "steelblue") +
+	guides(fill = guide_legend(title = "Interactions",
+														 ticks.colour = "black",
+														 frame.colour = "black")) +
+	# scale_fill_viridis_c(option = "mako") +
+	new_scale_fill() +
+	geom_sf(data = player_stats, aes(fill = n), color = "black") +
+	scale_fill_gradient(low = "white", high = "cadetblue") +
+	# scale_fill_viridis_c() +
+	guides(fill = guide_legend(title = "Players",
+	ticks.colour = "black",
+	frame.colour = "black")) +
+	theme(legend.position = c(1, 1),
+				legend.justification = c(1, 1), legend.box = "horizontal")
+
+map
+# X ----------------------------------------------------------------------------
+demo <- ggplot(demographics,
+			 aes(x = age_bracket, y = count, fill = gender)) +
+	geom_col(position = "dodge",
+					 color = "black") +
+	scale_fill_manual(values = c("white", "black")) +
+	labs(x = "Age bracket",
+			 y = "Count",
+			 fill = "FaceBook\nGender") +
+	theme_minimal(base_size = 7) +
+	theme(legend.position = c(1, 1),
+				legend.justification = c(1, 1))
+
+
+cowplot::plot_grid(map, demo,
+									 ncol = 1,
+									 labels = c("AUTO"),
+									 rel_heights = c(2, 1))
 
 ## EXPORT ######################################################################
 
 # X ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

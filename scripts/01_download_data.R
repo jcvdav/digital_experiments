@@ -32,7 +32,7 @@ options(
 # Identify all google sheets that match the naming convention
 files <- googledrive::drive_find(corpus = "user",
                                  type = "spreadsheet") %>%
-  filter(str_detect(name, pattern = "[:alnum:]{3}_[:alnum:]{3}"),
+  filter(str_detect(name, pattern = "[:alpha:]{3}_[:alpha:]{3}_[:digit:]{1,2}"),
          map_lgl(drive_resource, ~.x$createdTime > "2023-11-15T00:00:00.000Z")) %>%
   rename(session_id = name)
 
