@@ -19,6 +19,10 @@ pacman::p_load(
 	tidyverse
 )
 
+theme_set(
+	theme_minimal(base_size = 7)
+)
+
 # Load data --------------------------------------------------------------------
 # Data from the Finkbeiner paper
 original_data <- read_excel(here("data/raw/Baja baseline data games 2015.xls"))
@@ -49,8 +53,22 @@ palette <- c(Baseline = "darkorange1",
              Uncertainty = "steelblue",
 						 B = "steelblue")
 
-orig_h <- ggplot(data = original_tabular_data,
-								 mapping = aes(x = t, y = H / 25, color = game, fill = game)) +
+
+min_orig <- original_tabular_data %>%
+	select(t, h = H, N = last_N) %>%
+	mutate(src = "in person",
+				 game = "Baseline",
+				 h = h / 25)
+
+min_dig <- tabular_data %>%
+	select(t, h, N = Nt, game) %>%
+	mutate(src = "digital",
+				 h = h / 5)
+
+combined <- bind_rows(min_orig, min_dig)
+
+H <- ggplot(data = combined,
+						mapping = aes(x = t, y = h, color = game, fill = game, linetype = src)) +
 	stat_summary(geom = "ribbon",
 							 fun.data = mean_se,
 							 alpha = 0.25) +
@@ -60,15 +78,18 @@ orig_h <- ggplot(data = original_tabular_data,
 	scale_y_continuous(limits = c(0, 1)) +
 	scale_x_continuous(breaks = c(0, 5, 10, 15), labels = c(0, 5, 10, 15)) +
 	labs(x = "Round",
-			 y = "Average group catch rate") +
-	theme_minimal(base_size = 7) +
-	theme(legend.position = "None",
-				panel.grid = element_blank()) +
+			 y = "Average harvest rate",
+			 color = "Treatment",
+			 fill = "Treatment",
+			 linetype = "Source") +
 	scale_fill_manual(values = palette,
-										aesthetics = c("color", "fill"))
+										aesthetics = c("color", "fill")) +
+	theme(legend.position = "inside",
+				legend.justification.inside = c(1, 1),
+				legend.direction = "horizontal")
 
-orig_N <- ggplot(data = original_tabular_data,
-								 mapping = aes(x = t, y = last_N, color = game, fill = game)) +
+N <- ggplot(data = combined,
+						mapping = aes(x = t, y = N, color = game, fill = game, linetype = src)) +
 	stat_summary(geom = "ribbon",
 							 fun.data = mean_se,
 							 alpha = 0.25) +
@@ -80,59 +101,19 @@ orig_N <- ggplot(data = original_tabular_data,
 	labs(x = "Round",
 			 y = "Average population size",
 			 color = "Treatment",
-			 fill = "Treatment") +
-	theme_minimal(base_size = 7) +
+			 fill = "Treatment",
+			 linetype = "Source") +
 	scale_fill_manual(values = palette,
 										aesthetics = c("color", "fill")) +
-	theme(legend.position = "None",
-				panel.grid = element_blank())
+	theme(legend.position = "None")
 
+plot <- cowplot::plot_grid(H, N,
+													 ncol = 2,
+													 labels = "auto",
+													 vjust = 0.9,
+													 align = "hv")
 
-our_h <- tabular_data %>%
-  ggplot(aes(x = t, y = h/5, color = game, fill = game)) +
-  stat_summary(geom = "ribbon",
-               fun.data = mean_se,
-               alpha = 0.25) +
-  stat_summary(geom = "line",
-               fun = mean,
-               linewidth = 1) +
-	scale_y_continuous(limits = c(0, 1)) +
-	scale_x_continuous(breaks = c(0, 5, 10, 15), labels = c(0, 5, 10, 15)) +
-  labs(x = "Round",
-       y = "Average player's catch rate") +
-	theme_minimal(base_size = 7) +
-  theme(legend.position = "None",
-        panel.grid = element_blank()) +
-  scale_fill_manual(values = palette,
-                    aesthetics = c("color", "fill"))
-
-our_N <- tabular_data %>%
-  ggplot(aes(x = t, y = last_N, color = game, fill = game)) +
-  stat_summary(geom = "ribbon",
-               fun.data = mean_se,
-               alpha = 0.25) +
-  stat_summary(geom = "line",
-               fun = mean,
-               linewidth = 1) +
-	scale_y_continuous(limits = c(0, 100)) +
-	scale_x_continuous(breaks = c(0, 5, 10, 15), labels = c(0, 5, 10, 15)) +
-  labs(x = "Round",
-       y = "Average population size",
-       color = "Treatment",
-       fill = "Treatment") +
-	theme_minimal(base_size = 7) +
-  scale_fill_manual(values = palette,
-                    aesthetics = c("color", "fill")) +
-  theme(legend.position = c(0, 0),
-        legend.justification = c(0, 0),
-        legend.background = element_blank(),
-        panel.grid = element_blank())
-
-cowplot::plot_grid(orig_h,
-									 our_h,
-									 orig_N,
-									 our_N,
-									 ncol = 2,
-									 labels = "AUTO",
-									 label_x = 0.9,
-									 align = "hv")
+startR::lazy_ggsave(plot = plot,
+										filename = "fig4_state_vars",
+										width = 12,
+										height = 6)

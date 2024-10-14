@@ -1,0 +1,43 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+caption={\label{tab:effects}\textbf{Coefficient estimates for the effect of game round and environmental uncertainty on catch rate.} Panel A shows summary statistics associated with the validation results plotted in Fig 5. Panel B shows results for testing for the effect of information alone.},
+note{}={* p < 0.1, ** p < 0.05, *** p < 0.01},
+note{ }={Each column represents results for a different sample. Each panel represents a different test. Numbers in parentheses are Driscol-Kraay Standard errors. All specifications include fixed-effects by region.},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]},
+cell{2}{1}={c=4}{},cell{8}{1}={c=4}{},
+cell{3}{1}={preto={\hspace{1em}}},
+cell{4}{1}={preto={\hspace{1em}}},
+cell{5}{1}={preto={\hspace{1em}}},
+cell{6}{1}={preto={\hspace{1em}}},
+cell{7}{1}={preto={\hspace{1em}}},
+cell{9}{1}={preto={\hspace{1em}}},
+cell{10}{1}={preto={\hspace{1em}}},
+cell{11}{1}={preto={\hspace{1em}}},
+cell{12}{1}={preto={\hspace{1em}}},
+cell{13}{1}={preto={\hspace{1em}}},
+cell{14}{1}={preto={\hspace{1em}}},
+column{1}={halign=l,},
+column{2}={halign=c,},
+column{3}={halign=c,},
+column{4}={halign=c,},
+}                     %% tabularray inner close
+\toprule
+& Full & Both treatments & Baseline only \\ \midrule %% TinyTableHeader
+Panel A) Validation analysis &&& \\
+Round            & -0.009*** & -0.008**  & -0.010*** \\
+& (0.003)   & (0.004)   & (0.003)   \\
+Env. Uncertainty & -0.094*** & -0.106*** &           \\
+& (0.020)   & (0.022)   &           \\
+Num.Obs.         & 740       & 590       & 150       \\
+Panel B) Information only &&& \\
+Round            & -0.007**  & -0.005    & -0.010*** \\
+& (0.003)   & (0.004)   & (0.003)   \\
+Env. Uncertainty & -0.030    & -0.030    &           \\
+& (0.029)   & (0.034)   &           \\
+Num.Obs.         & 522       & 372       & 150       \\
+\bottomrule
+\end{talltblr}
+\end{table}

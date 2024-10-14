@@ -17,7 +17,12 @@ pacman::p_load(
 	here,
 	rnaturalearth,
 	sf,
+	ggnewscale,
 	tidyverse
+)
+
+theme_set(
+	theme_minimal(base_size = 8)
 )
 
 # Load data --------------------------------------------------------------------
@@ -37,7 +42,7 @@ mex <- ne_states(country = "Mexico", returnclass = "sf") %>%
 state_counts <- state_counts_raw %>%
 	rename(post = Pauta,
 				 state = Estado,
-				 n = N) %>%
+				 n = Alcance) %>%
 	mutate(state = case_when(state == "San Luis" ~ "San Luis Potosí",
 													 state == "Estado de México" ~ "México",
 													 T ~ state)) %>%
@@ -115,19 +120,22 @@ demo <- ggplot(demographics,
 	labs(x = "Age bracket",
 			 y = "Count",
 			 fill = "FaceBook\nGender") +
-	theme_minimal(base_size = 7) +
 	theme(legend.position = c(1, 1),
 				legend.justification = c(1, 1))
 
 
-cowplot::plot_grid(map, demo,
-									 ncol = 1,
-									 labels = c("AUTO"),
-									 rel_heights = c(2, 1))
+plot <- cowplot::plot_grid(map, demo,
+													 ncol = 1,
+													 labels = c("auto"),
+													 rel_heights = c(2, 1))
 
 ## EXPORT ######################################################################
 
 # X ----------------------------------------------------------------------------
+startR::lazy_ggsave(plot = plot,
+										filename = "fig2_fb_map",
+										width = 12,
+										height = 12)
 
 
 

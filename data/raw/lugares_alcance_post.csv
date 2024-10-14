@@ -1,66 +1,75 @@
-Pauta,Estado,N
-1,Sonora,461
-1,Baja California,369
-1,Yucat√°n,345
-1,Baja Calfiornia,312
-1,Veracruz,284
-1,Quintana Roo,246
-1,Sinaloa,209
-1,Guerrero,186
-1,Distrito Federal ,180
-1,Tamaulipas ,149
-1,Jalisco,132
-1,Oaxaca,130
-1,Campeche,120
-1,Michoac√°n,74
-1,Chiapas,74
-1,Colima,63
-1,Nayarit,62
-1,Tabasco,56
-1,Estado de M√©xico,44
-1,Nuevo Le√≥n,29
-1,Puebla,16
-1,Hidalgo,15
-1,Chihuahua,13
-1,San Luis ,12
-1,Quer√©taro,11
-1,Guanajuato,10
-1,Zacatecas,7
-1,Morelos,6
-1,Durango ,6
-1,Aguascalientes,5
-1,Coahuila,4
-1,Tlaxcala,3
-2,Chiapas,416
-2,Veracruz,308
-2,Oaxaca,228
-2,Guerrero,211
-2,Sonora,196
-2,Tabasco,188
-2,Michoacan,174
-2,Estado de M√©xico,164
-2,Yucat√°n,124
-2,Puebla,123
-2,Baja California,122
-2,Tamaulipas ,111
-2,Sinaloa,111
-2,Chihuahua,110
-2,Jalisco,93
-2,Distrito Federal ,85
-2,Quintana Roo,82
-2,Hidalgo,82
-2,Guanajuato,80
-2,Durango ,76
-2,Campeche,72
-2,Zacatecas,71
-2,San Luis ,70
-2,Coahuila,70
-2,Baja California Sur,56
-2,Morelos,50
-2,Nayarit,40
-2,Tlaxcala,34
-2,Colima,30
-2,Nuevo Le√≥n,19
-2,Quer√©taro,17
-2,Aguascalientes,17
-2,Sin ubicaci√≥n,14
+Pauta,Estado,Alcance
+1,Oaxaca,18649
+1,Yucatán,11291
+1,Campeche,7341
+1,Nayarit,3966
+1,Baja California Sur,3934
+1,Veracruz,2607
+1,Quintana Roo,2063
+1,Sonora,257
+2,Sonora,461
+2,Baja California,369
+2,Yucatán,345
+2,Baja Calfiornia,312
+2,Veracruz,284
+2,Quintana Roo,246
+2,Sinaloa,209
+2,Guerrero,186
+2,Distrito Federal,180
+2,Tamaulipas,149
+2,Jalisco,132
+2,Oaxaca,130
+2,Campeche,120
+2,Michoacán,74
+2,Chiapas,74
+2,Colima,63
+2,Nayarit,62
+2,Tabasco,56
+2,Estado de México,44
+2,Nuevo León,29
+2,Puebla,16
+2,Hidalgo,15
+2,Chihuahua,13
+2,San Luis,12
+2,Querétaro,11
+2,Guanajuato,10
+2,Zacatecas,7
+2,Morelos,6
+2,Durango,6
+2,Aguascalientes,5
+2,Coahuila,4
+2,Tlaxcala,3
+3,Chiapas,416
+3,Veracruz,308
+3,Oaxaca,228
+3,Guerrero,211
+3,Sonora,196
+3,Tabasco,188
+3,Michoacan,174
+3,Estado de México,164
+3,Yucatán,124
+3,Puebla,123
+3,Baja California,122
+3,Tamaulipas,111
+3,Sinaloa,111
+3,Chihuahua,110
+3,Jalisco,93
+3,Distrito Federal,85
+3,Quintana Roo,82
+3,Hidalgo,82
+3,Guanajuato,80
+3,Durango,76
+3,Campeche,72
+3,Zacatecas,71
+3,San Luis,70
+3,Coahuila,70
+3,Baja California Sur,56
+3,Morelos,50
+3,Nayarit,40
+3,Tlaxcala,34
+3,Colima,30
+3,Nuevo León,19
+3,Querétaro,17
+3,Aguascalientes,17
+3,Sin ubicación,14
+4,n/a,

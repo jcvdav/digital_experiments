@@ -20,6 +20,10 @@ pacman::p_load(
 	tidyverse
 )
 
+theme_set(
+	theme_minimal(base_size = 8)
+)
+
 # Load data --------------------------------------------------------------------
 raw_data <- readRDS(file = here("data", "processed", "tabular_game_data.rds")) %>%
 	mutate(both_games = ifelse(both_games == 1, "Both treatments", "Only baseline"))
@@ -37,7 +41,7 @@ fink_coefs <- tibble(coefficient = c("Round", "Env. Uncertainty"),
 										 values = c(-0.012, -0.016)) %>%
 	mutate(coefficient = fct_relevel(coefficient, "Round", "Env. Uncertainty"))
 
-coeftable(model) %>%
+plot <- coeftable(model) %>%
 	janitor::clean_names() %>%
 	mutate(sample = fct_relevel(sample, c("Full sample",
 																				"Both treatments",
@@ -46,18 +50,24 @@ coeftable(model) %>%
 				 												T ~ "Env. Uncertainty"),
 				 coefficient = fct_relevel(coefficient, "Round", "Env. Uncertainty")) %>%
 	ggplot(aes(x = sample, y = estimate)) +
-	geom_pointrange(aes(ymin = estimate - std_error,
-											ymax = estimate + std_error),
-									fill = "steelblue",
-									shape = 21) +
+	geom_linerange(aes(ymin = estimate - (1.96 * std_error),
+										 ymax = estimate + (1.95 * std_error))) +
+	geom_pointrange(aes(ymin = estimate - (std_error),
+											ymax = estimate + (std_error)),
+									color = "steelblue",
+									linewidth = 1.5) +
 	geom_hline(data = fink_coefs,
 						 aes(yintercept = values),
 						 linetype = "dashed") +
 	geom_hline(yintercept = 0) +
-	facet_wrap(~coefficient, scales = "free_y", ncol = 2) +
-	theme_minimal(base_size = 7) +
+	facet_wrap(~coefficient, scales = "free", ncol = 2) +
 	labs(x = "",
 			 y = "Estimate ± Std.Err")
+
+startR::lazy_ggsave(plot = plot,
+										filename = "fig5_effects",
+										width = 12,
+										height = 6)
 
 ## Source of reductions
 # X ----------------------------------------------------------------------------
@@ -83,15 +93,17 @@ robust_reduced <- fixest::feols(h / 5 ~ t + game | region,
 																vcov = "DK",
 																fsplit = ~both_games)
 
+names(model) <-  c("Full", "Both treatments", "Baseline only")
+names(robust_reduced) <-  c("Full", "Both treatments", "Baseline only")
+
 msummary(models = list("Panel A) Validation analysis" = model,
 											 "Panel B) Information only" = robust_reduced),
+				 output = here("results", "tab", "tab1_effects.tex"),
 				 shape = "rbind",
 				 stars = panelsummary:::econ_stars(),
 				 gof_omit = "R|IC|Std.|FE",
 				 coef_map = c("t" = "Round",
 				 						 "gameUncertainty" = "Env. Uncertainty"),
-				 notes = c("Each column represents results for a different sample.
-				          Each panel represents a different test.
-				 					The third column (Only baseline) can not estimate a treatment effect because there is no treatment with envronmental uncertainty (10 sessions).
-				 					Numbers in parentheses are Driscol-Kraay Standard errors.
-				 					All specifications include fixed-effects by region."))
+				 title = "\\label{tab:effects}\\textbf{Coefficient estimates for the effect of game round and environmental uncertainty on catch rate.} Panel A shows summary statistics associated with the validation results plotted in Fig 5. Panel B shows results for testing for the effect of information alone.",
+				 notes = c("Each column represents results for a different sample. Each panel represents a different test. Numbers in parentheses are Driscol-Kraay Standard errors. All specifications include fixed-effects by region."),
+				 escape = F)
