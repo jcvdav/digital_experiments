@@ -42,7 +42,7 @@ event_study_panel <- shock_times %>%
 				 post = 1 * (ttt > 5),
 				 full_ttt = ttt,
 				 ttt = case_when(pre == 1 ~ -Inf,
-				 								post == 1 ~Inf,
+				 								post == 1 ~ Inf,
 				 								T ~ ttt))
 
 event_study <- feols(h / 5 ~ pre + post + i(ttt, "0") | session_id + t,
