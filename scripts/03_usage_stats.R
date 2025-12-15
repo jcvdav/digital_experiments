@@ -31,9 +31,9 @@ demographics_raw <- read_csv(here("data/raw/edades_alcance_post.csv"))
 tabular_data <- readRDS(file = here("data", "processed", "tabular_game_data.rds"))
 
 # Spatial layers ---------------------------------------------------------------
-mex_zones <- st_read(here("../data_mex_fisheries/data/spatial_features/clean/mexico_fishing_regions.gpkg")) %>%
+mex_zones <- st_read(here("data/raw/mexico_fishing_regions.gpkg")) %>%
 	st_simplify()
-mex <- ne_states(country = "Mexico", returnclass = "sf") %>%
+mex <- ne_states(country = "Mexico") %>%
 	select(state = name)
 
 ## PROCESSING ##################################################################
@@ -110,7 +110,6 @@ map <- ggplot(data = data, aes(fill = n)) +
 	theme(legend.position = c(1, 1),
 				legend.justification = c(1, 1), legend.box = "horizontal")
 
-map
 # X ----------------------------------------------------------------------------
 demo <- ggplot(demographics,
 			 aes(x = age_bracket, y = count, fill = gender)) +
@@ -119,7 +118,7 @@ demo <- ggplot(demographics,
 	scale_fill_manual(values = c("white", "black")) +
 	labs(x = "Age bracket",
 			 y = "Count",
-			 fill = "FaceBook\nGender") +
+			 fill = "Facebook\nGender") +
 	theme(legend.position = c(1, 1),
 				legend.justification = c(1, 1))
 

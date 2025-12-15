@@ -69,7 +69,7 @@ plot <- event_study %>%
 											ymax = estimate + std.error),
 									color = "steelblue",
 									linewidth = 1.5) +
-	labs(x = "Time-to-shock (rounds)",
+	labs(x = "Time to shock (rounds)",
 			 y = "Estimate ± Std.Err & 95% CI") +
 	theme_minimal(base_size = 7) +
 	scale_x_continuous(breaks = c(-5:5))
@@ -97,7 +97,7 @@ supp_event_study <- ggfixest::ggiplot(object = list("Main text (preferred)" = ev
 																"Sun & Abrahams" = sunab_event_study)) +
 	theme_minimal(base_size = 7) +
 	theme(legend.position = "bottom") +
-	labs(x = "Time-to-treatment (rounds)",
+	labs(x = "Time to treatment (rounds)",
 			 title = "",
 			 color = "Estimation",
 			 shape = "Estimation",
