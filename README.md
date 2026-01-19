@@ -2,16 +2,21 @@
 
 Juan Carlos Villaseñor-Derbez et al.
 
+[![DOI](https://zenodo.org/badge/727395040.svg)](https://doi.org/10.5281/zenodo.18305914)
+
+
 ## Reproducibility
 
-The repository contains all the data and code required to replicate our findings. It also includes [`renv`](https://rstudio.github.io/renv/articles/renv.html#getting-started) to
-make sure you use the exact same package version we used. To reproduce our current environment,
-use `renv::restore()`. This will use the metadata in our lockfile to install exactly the same version of every package.
+The repository contains all the data and code required to replicate our findings.
+It also includes [`renv`](https://rstudio.github.io/renv/articles/renv.html#getting-started)
+to make sure you use the exact same package version we used. To reproduce our
+current environment, use `renv::restore()`. This will use the metadata in our
+lockfile to install exactly the same version of every package.
 
 
-## Repository structure
+## Repository structure 
 
-The following tree shows the repository structure as of July 16, 2025
+This repository is organized in a standard R project structure. The `scripts/` folder contains numbered R scripts (01-07) that should be run sequentially to reproduce all analyses, from data download through event study results. Raw data files are stored in `data/raw/`, processed datasets in `data/processed/`, and all outputs (figures and tables) are saved to `results/img/` and `results/tab/`. The `renv/` folder manages package dependencies for reproducibility.
 
 ```
 -- data
@@ -21,6 +26,7 @@ The following tree shows the repository structure as of July 16, 2025
       |__Baja baseline data games 2015.xls
       |__edades_alcance_post.csv
       |__lugares_alcance_post.csv
+      |__mexico_fishing_regions.gpkg
       |__raw_game_data.rds
 -- digital_experiments.Rproj
 -- README.md
@@ -30,6 +36,7 @@ The following tree shows the repository structure as of July 16, 2025
    |__library
       |__macos
    |__settings.json
+   |__staging
 -- results
    |__img
       |__fig1_screenshots.pdf
