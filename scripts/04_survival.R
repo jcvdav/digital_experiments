@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Analyze participant survival and retention rates
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script analyzes participant survival and retention rates through the
+# game. It calculates survival matrices showing progression from social media
+# access to game entry to completing rounds, and creates cumulative response
+# plots over time. Outputs fig3_survival.
 #
 ################################################################################
 
@@ -27,7 +29,6 @@ raw_game_data <- readRDS(file = here("data", "raw", "raw_game_data.rds"))
 
 ## PROCESSING ##################################################################
 
-# X ----------------------------------------------------------------------------
 # Get some stats ---------------------------------------------------------------
 # Number of accesses
 raw_game_data %>%

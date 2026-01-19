@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Create validation plots comparing digital and in-person game data
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script creates validation plots comparing digital game results with
+# original in-person game data. It visualizes harvest rates and population
+# sizes over time for both baseline and uncertainty treatments, comparing
+# digital versus in-person game formats. Outputs fig4_state_vars.
 #
 ################################################################################
 

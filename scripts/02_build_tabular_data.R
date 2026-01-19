@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Build tabular data from raw game data
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script processes raw game data into a structured tabular format. It
+# extracts dates, metadata (bug, fisher, age, sex, region, phone), processes
+# game rounds, and creates variables for game type (Baseline vs Uncertainty)
+# and shock type (MHW vs No). Outputs processed data for analysis.
 #
 ################################################################################
 

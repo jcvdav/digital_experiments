@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Generate usage statistics and demographic visualizations
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script creates visualizations of game usage statistics and participant
+# demographics. It processes Facebook interaction data by state, participant
+# demographics by age and gender, and game responses by fishing region. Outputs
+# a combined map and demographics plot (fig2_fb_map).
 #
 ################################################################################
 

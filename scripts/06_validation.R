@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Perform statistical validation of game effects
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script performs statistical validation of game effects using fixed-effects
+# regression. It estimates effects of game round and environmental uncertainty
+# on catch rate, compares results to original study coefficients, and tests
+# robustness using information-only analysis. Outputs fig5_effects and tab1_effects.
 #
 ################################################################################
 

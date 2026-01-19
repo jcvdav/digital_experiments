@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Download raw game data from Google Drive
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script downloads game data from Google Drive spreadsheets. It identifies
+# all sheets matching the naming convention (three letters, underscore, three
+# letters, underscore, digits), filters by creation date, and downloads the
+# data to a local RDS file for further processing.
 #
 ################################################################################
 

@@ -1,12 +1,14 @@
 ################################################################################
-# title
+# Conduct event study analysis of environmental shocks
 ################################################################################
 #
 # Juan Carlos Villaseñor-Derbez
-# juancvd@stanford.edu
-# date
+# jc_villasenor@miami.edu
 #
-# Description
+# This script conducts event study analysis to examine how harvest behavior
+# changes before and after environmental shocks (MHW events). It estimates
+# dynamic treatment effects using fixed-effects regression and tests robustness
+# with alternative specifications. Outputs fig6_event_study, figS1_supp_event_study, and tabS1_event_study.
 #
 ################################################################################
 
